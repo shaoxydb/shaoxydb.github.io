@@ -117,7 +117,7 @@
 <meta property="og:description" content="Dubbo基础小结">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://os4z8t7lb.bkt.clouddn.com/201805020101_243.jpg">
-<meta property="og:updated_time" content="2018-08-26T07:17:21.822Z">
+<meta property="og:updated_time" content="2018-08-26T11:29:25.407Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dubbo基础小结   &lt;!--文章标题--&gt;">
 <meta name="twitter:description" content="Dubbo基础小结">
@@ -345,7 +345,7 @@
                 
               
 
-              <time title="创建时间：2018-08-26 00:19:59 / 修改时间：15:17:21" itemprop="dateCreated datePublished" datetime="2018-08-26T00:19:59+08:00">2018-08-26</time>
+              <time title="创建时间：2018-08-26 00:19:59 / 修改时间：19:29:25" itemprop="dateCreated datePublished" datetime="2018-08-26T00:19:59+08:00">2018-08-26</time>
             
 
             
@@ -427,15 +427,37 @@
       
 
       
-        <h2 id="Dubbo是什么？"><a href="#Dubbo是什么？" class="headerlink" title="Dubbo是什么？"></a>Dubbo是什么？</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Dubbo是一个经典RPC（远程调用）框架，解决的是远程服务调用的问题。它的前身是阿里的项目，中间经过当当，然后现在是Apache的项目，由阿里进行维护。</span><br><span class="line">Dubbo同时也叫服务治理中间件。</span><br></pre></td></tr></table></figure>
-<h2 id="Dubbo的架构"><a href="#Dubbo的架构" class="headerlink" title="Dubbo的架构"></a>Dubbo的架构</h2><p><img src="D:\传智播客\复习总结\Dubbox\微信图片_20180822105747.png" alt=""></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">1.容器</span><br><span class="line">2.服务提供者</span><br><span class="line">3.注册中心</span><br><span class="line">4.服务消费者</span><br><span class="line">5.监控中心</span><br><span class="line">dubbo的运行流程：</span><br><span class="line">	服务容器（spring容器）启动后，服务提供者将服务地址注册到注册中心。</span><br><span class="line">	服务消费者向注册中心订阅服务，获得服务地址，然后通过服务地址远程调用服务提供者提供的服务，如果调用失败，会再选择另一个服务地址进行调用。</span><br><span class="line">	如果注册中心服务发生变更，将会通过长连接推送变更数据给服务消费者。</span><br><span class="line">	监控中心定时发送心跳包给服务生产者和消费者，知道服务生产者和消费者的健康情况。</span><br><span class="line">	</span><br><span class="line">心跳包就是在客户端和服务器间定时通知对方自己状态的一个自己定义的命令字，按照一定的时间间隔发送，类似于心跳，所以叫做心跳包。</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">节点角色说明：</span><br><span class="line">    Provider: 暴露服务的服务提供方。</span><br><span class="line">    Consumer: 调用远程服务的服务消费方。</span><br><span class="line">    Registry: 服务注册与发现的注册中心。</span><br><span class="line">    Monitor: 统计服务的调用次调和调用时间的监控中心。</span><br><span class="line">    Container: 服务运行容器。</span><br><span class="line">调用关系说明：</span><br><span class="line">    0. 服务容器负责启动，加载，运行服务提供者。</span><br><span class="line">    1. 服务提供者在启动时，向注册中心注册自己提供的服务。</span><br><span class="line">    2. 服务消费者在启动时，向注册中心订阅自己所需的服务。</span><br><span class="line">    3. 注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。</span><br><span class="line">    4. 服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。</span><br><span class="line">    5. 服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。</span><br></pre></td></tr></table></figure>
-<h2 id="注册中心Zookeeper"><a href="#注册中心Zookeeper" class="headerlink" title="注册中心Zookeeper"></a>注册中心Zookeeper</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">	官方推荐使用 zookeeper 注册中心。注册中心负责服务地址的注册与查找，相当于目录</span><br><span class="line">服务，服务提供者和消费者只在启动时与注册中心交互，注册中心不转发请求，压力较小。</span><br><span class="line">	Zookeeper 是 Apacahe Hadoop 的子项目，是一个树型的目录服务，支持变更推送，适</span><br><span class="line">合作为 Dubbox 服务的注册中心，工业强度较高，可用于生产环境。</span><br><span class="line"></span><br><span class="line">Dubbo的注册中心除了使用zookeeper还可以使用Redis【必备利器】，其功能类似于消息中间件。</span><br><span class="line"></span><br><span class="line">zookeeper   (配置文件和目录集中管理的软件)！ java开发的</span><br><span class="line"></span><br><span class="line">	1、检查jdk环境是否正常</span><br><span class="line"></span><br><span class="line">	2、上传安装包</span><br><span class="line"></span><br><span class="line">	3、安装</span><br><span class="line">			3.1 拷贝一个zoo.cfg配置文件，修改dataDir</span><br><span class="line">			3.2 创建一个data目录</span><br></pre></td></tr></table></figure>
+        <h2 id="Dubbo是什么？"><a href="#Dubbo是什么？" class="headerlink" title="Dubbo是什么？"></a>Dubbo是什么？</h2><p>Dubbo是一个经典RPC（远程调用）框架，解决的是远程服务调用的问题。它的前身是阿里的项目，中间经过当当，然后现在是Apache的项目，由阿里进行维护。Dubbo同时也叫服务治理中间件。</p>
+<h2 id="Dubbo的架构"><a href="#Dubbo的架构" class="headerlink" title="Dubbo的架构"></a>Dubbo的架构</h2><ul>
+<li><p>1.容器</p>
+</li>
+<li><p>2.服务提供者</p>
+</li>
+<li>3.注册中心</li>
+<li>4.服务消费者</li>
+<li>5.监控中心</li>
+</ul>
+<h3 id="dubbo的运行流程："><a href="#dubbo的运行流程：" class="headerlink" title="dubbo的运行流程："></a>dubbo的运行流程：</h3><p>​    服务容器（spring容器）启动后，服务提供者将服务地址注册到注册中心。<br>    服务消费者向注册中心订阅服务，获得服务地址，然后通过服务地址远程调用服务提供者提供的服务，如果调用失  败，会再选择另一个服务地址进行调用。<br>    如果注册中心服务发生变更，将会通过长连接推送变更数据给服务消费者。<br>    监控中心定时发送心跳包给服务生产者和消费者，知道服务生产者和消费者的健康情况。</p>
+<p>心跳包就是在客户端和服务器间定时通知对方自己状态的一个自己定义的命令字，按照一定的时间间隔发送，类似于心跳，所以叫做心跳包。</p>
+<h3 id="节点角色说明："><a href="#节点角色说明：" class="headerlink" title="节点角色说明："></a>节点角色说明：</h3><p>​    Provider: 暴露服务的服务提供方。<br>    Consumer: 调用远程服务的服务消费方。<br>    Registry: 服务注册与发现的注册中心。<br>    Monitor: 统计服务的调用次调和调用时间的监控中心。<br>    Container: 服务运行容器。</p>
+<h3 id="调用关系说明："><a href="#调用关系说明：" class="headerlink" title="调用关系说明："></a>调用关系说明：</h3><p>​    0. 服务容器负责启动，加载，运行服务提供者。</p>
+<pre><code>1. 服务提供者在启动时，向注册中心注册自己提供的服务。
+2. 服务消费者在启动时，向注册中心订阅自己所需的服务。
+3. 注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。
+4. 服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。
+5. 服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。
+</code></pre><h2 id="注册中心Zookeeper"><a href="#注册中心Zookeeper" class="headerlink" title="注册中心Zookeeper"></a>注册中心Zookeeper</h2><p>官方推荐使用 zookeeper 注册中心。注册中心负责服务地址的注册与查找，相当于目录<br>服务，服务提供者和消费者只在启动时与注册中心交互，注册中心不转发请求，压力较小。<br>    Zookeeper 是 Apacahe Hadoop 的子项目，是一个树型的目录服务，支持变更推送，适<br>合作为 Dubbox 服务的注册中心，工业强度较高，可用于生产环境。</p>
+<p>Dubbo的注册中心除了使用zookeeper还可以使用Redis【必备利器】，其功能类似于消息中间件。</p>
+<p>zookeeper   (配置文件和目录集中管理的软件)！ java开发的</p>
+<p>1、检查jdk环境是否正常</p>
+<p>2、上传安装包</p>
+<p>3、安装<br>        3.1 拷贝一个zoo.cfg配置文件，修改dataDir<br>        3.2 创建一个data目录</p>
 <h2 id="怎么用"><a href="#怎么用" class="headerlink" title="怎么用?"></a>怎么用?</h2><p>小案例，详细分析见图：</p>
-<p><img src="D:\传智播客\复习总结\Dubbox\dubbo入门详解.bmp" alt=""></p>
-<h2 id="为什么用Dubbo"><a href="#为什么用Dubbo" class="headerlink" title="为什么用Dubbo"></a>为什么用Dubbo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">rpc框架很多： webservice+http+json  等等。。。为啥要使用Dubbo</span><br><span class="line">	为什么使用某个技术： 同类技术缺点，该技术的优点！</span><br><span class="line"></span><br><span class="line">Dubbo是一个经典RPC框架，一般设计一个rpc框架要使用通信协议和底层io流，而我们都知道通信协议越底层传输效率越高。</span><br><span class="line"></span><br><span class="line">网络参考模型： 理论7层参考模型  ； 实际应用 4层。</span><br><span class="line">【4层】</span><br><span class="line">	应用层  ：http协议</span><br><span class="line">	传输层  ：TCP和UDP</span><br><span class="line">	网络层  ： IP</span><br><span class="line">	数据链路层： 二进制协议</span><br><span class="line"></span><br><span class="line">Webservice   :  Soap协议 和 http协议     (这协议在应用层，效率比较低)</span><br><span class="line">Dubbo  ：</span><br><span class="line">	发布服务 ：zookeeper协议 【ZAB ( ZooKeeper Atomic Broadcast , ZooKeeper 原子消息广播协议）】       </span><br><span class="line">	调用服务 ：dubbo协议  （效率高）  （它们都属于二进制协议，效率高）</span><br></pre></td></tr></table></figure>
-<h2 id="问题？怎么解决？"><a href="#问题？怎么解决？" class="headerlink" title="问题？怎么解决？"></a>问题？怎么解决？</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.当注册中心宕机的时候，有什么影响？</span><br><span class="line">	1.1	对消费者：如果消费者不请求新的服务那就没有影响，因为消费者会缓存之前请求的服务地址到本地。</span><br><span class="line">	1.2	对服务生产者：如果发布或者更新服务的会有影响，不发布或者更新服务没有影响！</span><br><span class="line">2.连接超时问题，怎么解决？</span><br><span class="line">	重试机制：</span><br><span class="line">	2.1	@Reference   timeout属性 可以修改默认连接超时的时间</span><br><span class="line">	2.2 @Reference   retries=1  属性表示你重发几次</span><br></pre></td></tr></table></figure>
+<h2 id="为什么用Dubbo"><a href="#为什么用Dubbo" class="headerlink" title="为什么用Dubbo"></a>为什么用Dubbo</h2><pre><code>rpc框架很多： webservice+http+json  等等。。。为啥要使用Dubbo
+</code></pre><p>​    Dubbo是一个经典RPC框架，一般设计一个rpc框架要使用通信协议和底层io流，而我们都知道通信协议越底层传输效率越高。</p>
+<p>​    网络参考模型： 理论7层参考模型  ； 实际应用 4层。<br>    【4层】<br>        应用层  ：http协议<br>        传输层  ：TCP和UDP<br>        网络层  ： IP<br>        数据链路层： 二进制协议</p>
+<p>​    Webservice   :  Soap协议 和 http协议     (这协议在应用层，效率比较低)<br>    Dubbo  ：<br>        发布服务 ：zookeeper协议 【ZAB ( ZooKeeper Atomic Broadcast , ZooKeeper 原子消息广播协议）】<br>        调用服务 ：dubbo协议  （效率高）  （它们都属于二进制协议，效率高）</p>
+<h2 id="问题？怎么解决？"><a href="#问题？怎么解决？" class="headerlink" title="问题？怎么解决？"></a>问题？怎么解决？</h2><p>1.当注册中心宕机的时候，有什么影响？<br>    1.1    对消费者：如果消费者不请求新的服务那就没有影响，因为消费者会缓存之前请求的服务地址到本地。<br>    1.2    对服务生产者：如果发布或者更新服务的会有影响，不发布或者更新服务没有影响！<br>2.连接超时问题，怎么解决？<br>    重试机制：<br>    2.1    @Reference   timeout属性 可以修改默认连接超时的时间<br>    2.2 @Reference   retries=1  属性表示你重发几次</p>
 
       
     </div>
@@ -619,7 +641,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo是什么？"><span class="nav-number">1.</span> <span class="nav-text">Dubbo是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo的架构"><span class="nav-number">2.</span> <span class="nav-text">Dubbo的架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册中心Zookeeper"><span class="nav-number">3.</span> <span class="nav-text">注册中心Zookeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么用"><span class="nav-number">4.</span> <span class="nav-text">怎么用?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么用Dubbo"><span class="nav-number">5.</span> <span class="nav-text">为什么用Dubbo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题？怎么解决？"><span class="nav-number">6.</span> <span class="nav-text">问题？怎么解决？</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo是什么？"><span class="nav-number">1.</span> <span class="nav-text">Dubbo是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo的架构"><span class="nav-number">2.</span> <span class="nav-text">Dubbo的架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dubbo的运行流程："><span class="nav-number">2.1.</span> <span class="nav-text">dubbo的运行流程：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点角色说明："><span class="nav-number">2.2.</span> <span class="nav-text">节点角色说明：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用关系说明："><span class="nav-number">2.3.</span> <span class="nav-text">调用关系说明：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册中心Zookeeper"><span class="nav-number">3.</span> <span class="nav-text">注册中心Zookeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么用"><span class="nav-number">4.</span> <span class="nav-text">怎么用?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么用Dubbo"><span class="nav-number">5.</span> <span class="nav-text">为什么用Dubbo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题？怎么解决？"><span class="nav-number">6.</span> <span class="nav-text">问题？怎么解决？</span></a></li></ol></div>
             
 
           </div>
