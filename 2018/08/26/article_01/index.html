@@ -108,19 +108,19 @@
 
 
 
-  <meta name="description" content="Dubbo基础小结">
+  <meta name="description" content="Dubbo是什么？Dubbo是一个经典RPC（远程调用）框架，解决的是远程服务调用的问题。它的前身是阿里的项目，中间经过当当，然后现在是Apache的项目，由阿里进行维护。Dubbo同时也叫服务治理中间件。">
 <meta name="keywords" content="dubbo,java技术">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dubbo基础小结   &lt;!--文章标题--&gt;">
 <meta property="og:url" content="http://yoursite.com/2018/08/26/article_01/index.html">
 <meta property="og:site_name" content="邵晓云的技术博客">
-<meta property="og:description" content="Dubbo基础小结">
+<meta property="og:description" content="Dubbo是什么？Dubbo是一个经典RPC（远程调用）框架，解决的是远程服务调用的问题。它的前身是阿里的项目，中间经过当当，然后现在是Apache的项目，由阿里进行维护。Dubbo同时也叫服务治理中间件。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://os4z8t7lb.bkt.clouddn.com/201805020101_243.jpg">
-<meta property="og:updated_time" content="2018-08-26T11:29:25.407Z">
+<meta property="og:updated_time" content="2018-08-26T11:35:33.346Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dubbo基础小结   &lt;!--文章标题--&gt;">
-<meta name="twitter:description" content="Dubbo基础小结">
+<meta name="twitter:description" content="Dubbo是什么？Dubbo是一个经典RPC（远程调用）框架，解决的是远程服务调用的问题。它的前身是阿里的项目，中间经过当当，然后现在是Apache的项目，由阿里进行维护。Dubbo同时也叫服务治理中间件。">
 <meta name="twitter:image" content="http://os4z8t7lb.bkt.clouddn.com/201805020101_243.jpg">
 
 
@@ -345,7 +345,7 @@
                 
               
 
-              <time title="创建时间：2018-08-26 00:19:59 / 修改时间：19:29:25" itemprop="dateCreated datePublished" datetime="2018-08-26T00:19:59+08:00">2018-08-26</time>
+              <time title="创建时间：2018-08-26 00:19:59 / 修改时间：19:35:33" itemprop="dateCreated datePublished" datetime="2018-08-26T00:19:59+08:00">2018-08-26</time>
             
 
             
@@ -395,8 +395,6 @@
           
 
           
-              <div class="post-description">Dubbo基础小结</div>
-          
 
         </div>
       </header>
@@ -428,15 +426,12 @@
 
       
         <h2 id="Dubbo是什么？"><a href="#Dubbo是什么？" class="headerlink" title="Dubbo是什么？"></a>Dubbo是什么？</h2><p>Dubbo是一个经典RPC（远程调用）框架，解决的是远程服务调用的问题。它的前身是阿里的项目，中间经过当当，然后现在是Apache的项目，由阿里进行维护。Dubbo同时也叫服务治理中间件。</p>
-<h2 id="Dubbo的架构"><a href="#Dubbo的架构" class="headerlink" title="Dubbo的架构"></a>Dubbo的架构</h2><ul>
-<li><p>1.容器</p>
-</li>
-<li><p>2.服务提供者</p>
-</li>
-<li>3.注册中心</li>
-<li>4.服务消费者</li>
-<li>5.监控中心</li>
-</ul>
+<a id="more"></a>
+<h2 id="Dubbo的架构"><a href="#Dubbo的架构" class="headerlink" title="Dubbo的架构"></a>Dubbo的架构</h2><p>1.容器</p>
+<p>2.服务提供者</p>
+<p>3.注册中心</p>
+<p>4.服务消费者</p>
+<p>5.监控中心</p>
 <h3 id="dubbo的运行流程："><a href="#dubbo的运行流程：" class="headerlink" title="dubbo的运行流程："></a>dubbo的运行流程：</h3><p>​    服务容器（spring容器）启动后，服务提供者将服务地址注册到注册中心。<br>    服务消费者向注册中心订阅服务，获得服务地址，然后通过服务地址远程调用服务提供者提供的服务，如果调用失  败，会再选择另一个服务地址进行调用。<br>    如果注册中心服务发生变更，将会通过长连接推送变更数据给服务消费者。<br>    监控中心定时发送心跳包给服务生产者和消费者，知道服务生产者和消费者的健康情况。</p>
 <p>心跳包就是在客户端和服务器间定时通知对方自己状态的一个自己定义的命令字，按照一定的时间间隔发送，类似于心跳，所以叫做心跳包。</p>
 <h3 id="节点角色说明："><a href="#节点角色说明：" class="headerlink" title="节点角色说明："></a>节点角色说明：</h3><p>​    Provider: 暴露服务的服务提供方。<br>    Consumer: 调用远程服务的服务消费方。<br>    Registry: 服务注册与发现的注册中心。<br>    Monitor: 统计服务的调用次调和调用时间的监控中心。<br>    Container: 服务运行容器。</p>
