@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="什么是RedisRedis是一个开源在内存中存储数据一种存储系统。可以用作数据库、缓存、消息中间件。（通常也将redis叫内存数据库，非关系型数据库，nosql数据库）。 redis是一个单线程的！（不存在线程安全问题）！ 所以很多命令（原子）就可以作为锁来用，譬如 ：setnx  。">
+<meta name="keywords" content="java技术,redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis  &lt;!--文章标题--&gt;">
+<meta property="og:url" content="http://yoursite.com/2018/08/27/article_02redis/index.html">
+<meta property="og:site_name" content="邵晓云的技术博客">
+<meta property="og:description" content="什么是RedisRedis是一个开源在内存中存储数据一种存储系统。可以用作数据库、缓存、消息中间件。（通常也将redis叫内存数据库，非关系型数据库，nosql数据库）。 redis是一个单线程的！（不存在线程安全问题）！ 所以很多命令（原子）就可以作为锁来用，譬如 ：setnx  。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2224932346,3678817225&fm=27&gp=0.jpg">
+<meta property="og:updated_time" content="2018-08-27T14:37:57.806Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis  &lt;!--文章标题--&gt;">
+<meta name="twitter:description" content="什么是RedisRedis是一个开源在内存中存储数据一种存储系统。可以用作数据库、缓存、消息中间件。（通常也将redis叫内存数据库，非关系型数据库，nosql数据库）。 redis是一个单线程的！（不存在线程安全问题）！ 所以很多命令（原子）就可以作为锁来用，譬如 ：setnx  。">
+<meta name="twitter:image" content="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2224932346,3678817225&fm=27&gp=0.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/27/article_02redis/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Redis  <!--文章标题--> | 邵晓云的技术博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">邵晓云的技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">个人知识笔记</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/27/article_02redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="shaoxydb">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邵晓云的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis  <!--文章标题-->
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-27 22:36:04 / 修改时间：22:37:57" itemprop="dateCreated datePublished" datetime="2018-08-27T22:36:04+08:00">2018-08-27</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java-只能有一个分类/" itemprop="url" rel="index"><span itemprop="name">Java    <!--只能有一个分类--></span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2224932346,3678817225&fm=27&gp=0.jpg" rel="gallery_cjlce18q00002jgvey5y0oxye"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2224932346,3678817225&fm=27&gp=0.jpg" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <h2 id="什么是Redis"><a href="#什么是Redis" class="headerlink" title="什么是Redis"></a>什么是Redis</h2><p>Redis是一个开源在内存中存储数据一种存储系统。可以用作数据库、缓存、消息中间件。（通常也将redis叫内存数据库，非关系型数据库，nosql数据库）。</p>
+<p>redis是一个单线程的！（不存在线程安全问题）！ 所以很多命令（原子）就可以作为锁来用，譬如 ：setnx  。<br><a id="more"></a></p>
+<h2 id="关系型和非关系型的区别"><a href="#关系型和非关系型的区别" class="headerlink" title="关系型和非关系型的区别"></a>关系型和非关系型的区别</h2><p>关系型数据库： 用一张二维表格来表示现实世界中对象，并存储的数据库，称为关系型数据。 代表：Oracle ，MySQL，SqlServer</p>
+<p>非关系型数据库：通常用key-value 来进行数据库描述和存储的这一类数据库称为非关系型数据库。代表：redis，mogodb （文档–类似表）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> 		非关系型数据库                关系型数据库</span><br><span class="line"></span><br><span class="line">存储介质：   	内存 （半导体）               磁盘  （盘片）</span><br><span class="line"></span><br><span class="line">存取数据速度：   相当的快                      相对较慢</span><br><span class="line"></span><br><span class="line">缺点 ：         数据断电丢失                  永久存储数据</span><br></pre></td></tr></table></figure>
+<p>由于内存中存储数据，断电丢失数据，因此我们需要对Redis进行持久化操作（将内存中的数据刷到硬盘永久保存）！</p>
+<h2 id="Redis的五种数据结构及其应用场景"><a href="#Redis的五种数据结构及其应用场景" class="headerlink" title="Redis的五种数据结构及其应用场景"></a>Redis的五种数据结构及其应用场景</h2><h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">相当于map结构： key -- value</span><br><span class="line"></span><br><span class="line">语法：</span><br><span class="line">存储数据到Redis : set key  value </span><br><span class="line">从Redis取数据 : get key </span><br><span class="line"></span><br><span class="line">重要的不要不要的命令：</span><br><span class="line">*****设置key 过期时间</span><br><span class="line">	expire  key   timeout </span><br><span class="line">	举例： expire  abc  3*60     表示abc这个key3分钟以后会从redis中删除（干掉他！）</span><br><span class="line">*****自增</span><br><span class="line">	incr  key      原子自增1  可以生成订单的或者商品的id （保证不重复）</span><br><span class="line">	举例 set id 10</span><br><span class="line">		incr id     ---》 id 变成11 </span><br><span class="line">*****自减</span><br><span class="line">	decr  key      原子自减1   【并发减库存】</span><br></pre></td></tr></table></figure>
+<h3 id="hash（大map套小map）"><a href="#hash（大map套小map）" class="headerlink" title="hash（大map套小map）"></a>hash（大map套小map）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">key -field1 -value1</span><br><span class="line">key -field2 -value2</span><br><span class="line"></span><br><span class="line">hset  key   field  value</span><br><span class="line">hget  key   filed </span><br><span class="line"></span><br><span class="line">主要用于对key分类！ 主要电商用于设计购物车！【用户登录用redis设计购物车】、【用户未登录cookie】</span><br></pre></td></tr></table></figure>
+<h3 id="list"><a href="#list" class="headerlink" title="list"></a>list</h3><h3 id="set"><a href="#set" class="headerlink" title="set"></a>set</h3><h3 id="zset-sorted-set"><a href="#zset-sorted-set" class="headerlink" title="zset(sorted set)"></a>zset(sorted set)</h3><h2 id="Redis持久化【RDB和AOF】"><a href="#Redis持久化【RDB和AOF】" class="headerlink" title="Redis持久化【RDB和AOF】"></a>Redis持久化【RDB和AOF】</h2><h3 id="RDB（快照）【默认，Redis-DataBase-】"><a href="#RDB（快照）【默认，Redis-DataBase-】" class="headerlink" title="RDB（快照）【默认，Redis DataBase 】"></a>RDB（快照）【默认，Redis DataBase 】</h3><p>保存数据到磁盘的规则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">save  秒  变化的key个数</span><br><span class="line"></span><br><span class="line">save 900 1             		15分钟至少有一个key被改变向磁盘保存一次  </span><br><span class="line"></span><br><span class="line">save 300 10           		5分钟至少10个key被改变向磁盘保存一次   </span><br><span class="line"></span><br><span class="line">save 60 10000       	 	1分钟至少10000个key被改变要向磁盘保存一次</span><br></pre></td></tr></table></figure>
+<p>这种规则效率高但是可能会丢数据。</p>
+<h3 id="AOF（文件追加）【Append-only-file-】"><a href="#AOF（文件追加）【Append-only-file-】" class="headerlink" title="AOF（文件追加）【Append-only file 】"></a>AOF（文件追加）【Append-only file 】</h3><p>将“操作 + 数据”追加到操作日志文件的尾部，在append操作返回后(已经写入到文件或者即将写入)，才进行实际的数据变更，“日志文件”保存了历史所有的操作过程；当server需要数据恢复时，可以直接replay此日志文件，即可还原所有的操作过程。 </p>
+<p>AOF可以保持更高的数据完整性，但AOF文件比RDB文件大，且恢复速度慢。</p>
+<h2 id="Redis内置的缓存淘汰策略LRU（最近最少使用）算法"><a href="#Redis内置的缓存淘汰策略LRU（最近最少使用）算法" class="headerlink" title="Redis内置的缓存淘汰策略LRU（最近最少使用）算法"></a>Redis内置的缓存淘汰策略LRU（最近最少使用）算法</h2><p>具体参考：</p>
+<p><a href="http://www.redis.cn/topics/lru-cache.html" target="_blank" rel="noopener">http://www.redis.cn/topics/lru-cache.html</a></p>
+<h2 id="Redis缓存产生的问题【缓存击穿】"><a href="#Redis缓存产生的问题【缓存击穿】" class="headerlink" title="Redis缓存产生的问题【缓存击穿】"></a>Redis缓存产生的问题【缓存击穿】</h2><p>缓存击穿：一个存在的key，在缓存过期的一刻，同时有大量的请求，这些请求都会击穿到DB，造成瞬时DB请求量大、压力骤增。 </p>
+<p>以下解决方法均为伪代码。</p>
+<h3 id="解决a-java互斥锁（Reentrantlock）【单机使用】"><a href="#解决a-java互斥锁（Reentrantlock）【单机使用】" class="headerlink" title="解决a. java互斥锁（Reentrantlock）【单机使用】"></a>解决a. java互斥锁（Reentrantlock）【单机使用】</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> Lock reenLock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getValueFromRedis</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">  	<span class="comment">//从缓存中读取数据  </span></span><br><span class="line">    String value=redis.get(key);   </span><br><span class="line">    <span class="keyword">if</span>(value==<span class="keyword">null</span>)&#123;  </span><br><span class="line">        <span class="comment">// 这个key在缓存中不存在  </span></span><br><span class="line">        <span class="keyword">if</span>(reenLock.tryLock())&#123;</span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">               <span class="comment">//从数据库获取数据</span></span><br><span class="line">               value=db.get(key);	</span><br><span class="line">               <span class="comment">//将数据存入缓存</span></span><br><span class="line">               redis.set(key,value)；          </span><br><span class="line">               <span class="keyword">return</span> value; </span><br><span class="line">            &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">                reenLock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123; </span><br><span class="line">            Thread.sleep(<span class="number">50</span>);<span class="comment">//休眠</span></span><br><span class="line">           	<span class="keyword">return</span> redis.get(key); <span class="comment">//重新获取数据</span></span><br><span class="line">        &#125;        </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> value;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解决b. redis（分布式锁）【推荐，多线程】（单机集群都可以使用）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getValueFromRedis</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">	<span class="comment">//从缓存查询数据  </span></span><br><span class="line">    String value=redis.get(key);   </span><br><span class="line">    <span class="keyword">if</span>(value==<span class="keyword">null</span>)&#123;   <span class="comment">// 这个key在缓存中不存在</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        	setnx(key,value) ;   返回值是true 或者false  </span></span><br><span class="line"><span class="comment">        	参数key： exits_redis+key</span></span><br><span class="line"><span class="comment">        	当我们key存在 false  key不存在是true	</span></span><br><span class="line"><span class="comment">        	第一条线程进来redis.setnx("existKey",1) true	</span></span><br><span class="line"><span class="comment">        	第二条线程进不来了redis.setnx("existKey",1) false</span></span><br><span class="line"><span class="comment">        */</span>     </span><br><span class="line">        <span class="keyword">if</span>(redis.setnx(<span class="string">"exitkey"</span>,<span class="string">"abc"</span>)) &#123;</span><br><span class="line">            <span class="comment">//从数据库获取数据</span></span><br><span class="line">        	value = db.get(key);</span><br><span class="line">            <span class="comment">//将数据存入缓存</span></span><br><span class="line">            redis.set(<span class="string">"key"</span>,value);</span><br><span class="line">            <span class="comment">//设置exitkey的生存时间，防止下面的删除操作出错导致死锁</span></span><br><span class="line">            redis.expire(<span class="string">"exitkey"</span>,<span class="number">1</span>*<span class="number">60</span>);</span><br><span class="line">            <span class="comment">//删除exitkey</span></span><br><span class="line">            redis.del(<span class="string">"exitkey"</span>);</span><br><span class="line">            <span class="keyword">return</span> value;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            Thread.sleep(<span class="number">50</span>);<span class="comment">//休眠</span></span><br><span class="line">            <span class="keyword">return</span> redis.get(key);<span class="comment">//重新获取数据</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> value;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java技术/" rel="tag"># java技术</a>
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/26/article_01/" rel="next" title="Dubbo基础小结   <!--文章标题-->">
+                <i class="fa fa-chevron-left"></i> Dubbo基础小结   <!--文章标题-->
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header.jpg"
+                alt="shaoxydb" />
+            
+              <p class="site-author-name" itemprop="name">shaoxydb</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/shaoxydb" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:shaoxiaoyun91@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Redis"><span class="nav-number">1.</span> <span class="nav-text">什么是Redis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关系型和非关系型的区别"><span class="nav-number">2.</span> <span class="nav-text">关系型和非关系型的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis的五种数据结构及其应用场景"><span class="nav-number">3.</span> <span class="nav-text">Redis的五种数据结构及其应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#String"><span class="nav-number">3.1.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hash（大map套小map）"><span class="nav-number">3.2.</span> <span class="nav-text">hash（大map套小map）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">3.3.</span> <span class="nav-text">list</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">3.4.</span> <span class="nav-text">set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zset-sorted-set"><span class="nav-number">3.5.</span> <span class="nav-text">zset(sorted set)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis持久化【RDB和AOF】"><span class="nav-number">4.</span> <span class="nav-text">Redis持久化【RDB和AOF】</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB（快照）【默认，Redis-DataBase-】"><span class="nav-number">4.1.</span> <span class="nav-text">RDB（快照）【默认，Redis DataBase 】</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF（文件追加）【Append-only-file-】"><span class="nav-number">4.2.</span> <span class="nav-text">AOF（文件追加）【Append-only file 】</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis内置的缓存淘汰策略LRU（最近最少使用）算法"><span class="nav-number">5.</span> <span class="nav-text">Redis内置的缓存淘汰策略LRU（最近最少使用）算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis缓存产生的问题【缓存击穿】"><span class="nav-number">6.</span> <span class="nav-text">Redis缓存产生的问题【缓存击穿】</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决a-java互斥锁（Reentrantlock）【单机使用】"><span class="nav-number">6.1.</span> <span class="nav-text">解决a. java互斥锁（Reentrantlock）【单机使用】</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shaoxydb</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
